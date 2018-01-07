@@ -27,6 +27,15 @@ public class XImageJWalkingThread extends SwingWorker<Object, String> {
     private boolean ignoreRois;
     protected volatile List<String> results;
     private ResultsSaver rs;
+    private int channel;
+
+    public int getChannel() {
+        return channel;
+    }
+
+    public void setChannel(int channel) {
+        this.channel = channel;
+    }
 
     public void setIgnoreRois(boolean ignoreRois) {
         this.ignoreRois = ignoreRois;
@@ -114,7 +123,7 @@ public class XImageJWalkingThread extends SwingWorker<Object, String> {
                     publish("INFO: processing " + workingFilePath);
 
                     if (!ignoreRois) {
-                        this.results = RoiProcessor.measureAll(IJ.openImage(workingFilePath));
+                        this.results = RoiProcessor.measureAll(IJ.openImage(workingFilePath), this.channel);
                     }
                     
                     if (ignoreRois||this.results.isEmpty()) {

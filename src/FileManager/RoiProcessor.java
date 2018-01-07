@@ -20,17 +20,18 @@ import java.util.List;
  */
 public class RoiProcessor {
 
-    static public List<String> measureAll(ImagePlus imp) {
+    static public List<String> measureAll(ImagePlus imp, int channel) {
         Overlay ol = imp.getOverlay();
         Roi[] rois = ol.toArray();
-        return measureAll(rois, imp);
+        return measureAll(rois, imp, channel);
     }
 
-    static public List<String> measureAll(Roi[] rois, ImagePlus imp) {
+    static public List<String> measureAll(Roi[] rois, ImagePlus imp, int channel) {
         Analyzer ana = new Analyzer(imp);
         List<String> results = new ArrayList<>();
         for (Roi roi : rois) {
             imp.setRoi(roi);
+            imp.setC(channel);
             ana.measure();
             ResultsTable rt = Analyzer.getResultsTable();
             String[] col = rt.getHeadings();

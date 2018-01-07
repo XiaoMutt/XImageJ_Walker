@@ -60,7 +60,7 @@ public class XImageJWalkerPickupWindow extends StackWindow {
 
         //when press done button add all roi to the overlay
         doneBn.addActionListener((ActionEvent e) -> {
-            xiwt.resumeWorker(RoiProcessor.measureAll(rm.getRoisAsArray(), this.imp));
+            this.xiwt.resumeWorker(RoiProcessor.measureAll(rm.getRoisAsArray(), this.imp, this.xiwt.getChannel()));
             RoiProcessor.saveImage(this.imp, rm.getRoisAsArray(), this.fileName);
             this.close();
 
