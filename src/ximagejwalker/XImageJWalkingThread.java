@@ -6,7 +6,11 @@ package ximagejwalker;
 import FileManager.RoiProcessor;
 import FileManager.FileIterator;
 import FileManager.ResultsSaver;
+import bsh.EvalError;
+import bsh.Interpreter;
 import ij.IJ;
+import ij.ImagePlus;
+import ij.gui.Roi;
 import ij.plugin.filter.Analyzer;
 import java.io.File;
 import java.io.IOException;
@@ -25,17 +29,8 @@ public class XImageJWalkingThread extends SwingWorker<Object, String> {
     private Pattern FileNameRegex;
     private String bsFileName;
     private boolean ignoreRois;
-    protected volatile List<String> results;
+    protected volatile List<Roi> rois;
     private ResultsSaver rs;
-    private int channel;
-
-    public int getChannel() {
-        return channel;
-    }
-
-    public void setChannel(int channel) {
-        this.channel = channel;
-    }
 
     public void setIgnoreRois(boolean ignoreRois) {
         this.ignoreRois = ignoreRois;
@@ -63,9 +58,9 @@ public class XImageJWalkingThread extends SwingWorker<Object, String> {
      *
      * @param rois ArrayList sent back to worker thread;
      */
-    public synchronized void resumeWorker(List<String> rois) {
+    public synchronized void resumeWorker(List<Roi> rois) {
         //firePropertyChange("ResumedWith", "", PickedRois);
-        this.results = rois;
+        this.rois = rois;
         notify();
     }
 
@@ -105,10 +100,24 @@ public class XImageJWalkingThread extends SwingWorker<Object, String> {
 
     }
 
+    private ImagePlus temperImageForMeasurement(ImagePlus imp) throws EvalError, IOException {
+
+        Interpreter ip = new Interpreter();
+        imp.setOverlay(null);
+        imp.deleteRoi();
+
+        ip.set("imp", imp);
+        ip.source(bsFileName);
+        ip.eval("after()");
+        return (ImagePlus) ip.get("imp");
+
+    }
+
     @Override
     protected Void doInBackground() {
         String runTag = java.util.UUID.randomUUID().toString();
         String workingFilePath;
+        List<String> results = null;
         boolean first = true;
 
         FileIterator xfi = new FileIterator(OpenFolder);
@@ -121,26 +130,35 @@ public class XImageJWalkingThread extends SwingWorker<Object, String> {
                 Matcher matcher = FileNameRegex.matcher(file.getName());
                 if (matcher.matches()) {
                     publish("INFO: processing " + workingFilePath);
-
+                    ImagePlus imp = IJ.openImage(workingFilePath);
                     if (!ignoreRois) {
-                        this.results = RoiProcessor.measureAll(IJ.openImage(workingFilePath), this.channel);
+                        this.rois = RoiProcessor.getRois(imp);
                     }
-                    
-                    if (ignoreRois||this.results.isEmpty()) {
+
+                    if (ignoreRois || this.rois == null || this.rois.isEmpty()) {
                         pauseWorker(workingFilePath);
                     }
 
-                    if (this.results != null) {
-                        if (first) {
-                            String[] colums = Analyzer.getResultsTable().getHeadings();
-                            rs.appendln(String.join(",", colums));
-                            first = false;
-                        }
-                        for (String s : this.results) {
-                            rs.appendln(s);
+                    if (this.rois != null && !this.rois.isEmpty()) {
+                        try {
+                            imp = this.temperImageForMeasurement(imp);
+                            results = RoiProcessor.measureAll(this.rois, imp);
+                            //add header;
+                            if (first) {
+                                String[] colums = Analyzer.getResultsTable().getHeadings();
+                                rs.appendln(String.join(",", colums));
+                                first = false;
+                            }
+                            
+                            for (String s : results) {
+                                rs.appendln(s);
 
+                            }
+                            publish("INFO: " + this.rois.size() + " Rois processed.");
+                        } catch (EvalError ex) {
+                            IJ.log("BeanShell Script Error: " + ex.getMessage());
                         }
-                        publish("INFO: " + this.results.size() + " Rois processed.");
+
                     } else {
                         publish("INTO: No Rois are processed.");
                     }

@@ -33,7 +33,6 @@ public class XImageJWalkerGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         openFolderBn = new javax.swing.JButton();
         openFolderTf = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -42,8 +41,6 @@ public class XImageJWalkerGUI extends javax.swing.JFrame {
         ignorelROICb = new javax.swing.JCheckBox();
         bsFileBn = new javax.swing.JButton();
         beanShellFileTf = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        channelSp = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("XImageJ_Walker");
@@ -82,10 +79,6 @@ public class XImageJWalkerGUI extends javax.swing.JFrame {
 
         beanShellFileTf.setEditable(false);
 
-        jLabel1.setText("Channel to measure:");
-
-        channelSp.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,12 +103,6 @@ public class XImageJWalkerGUI extends javax.swing.JFrame {
                                     .addComponent(openFolderTf)))
                             .addComponent(ignorelROICb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(channelSp, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,11 +119,7 @@ public class XImageJWalkerGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsFileBn)
                     .addComponent(beanShellFileTf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(channelSp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(ignorelROICb)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(runBn)
@@ -163,7 +146,6 @@ public class XImageJWalkerGUI extends javax.swing.JFrame {
             worker.setFileNameRegex(fileNameRegexCb.getSelectedItem().toString());
             worker.setBsFileName(beanShellFileTf.getText());
             worker.setIgnoreRois(ignorelROICb.isSelected());
-            worker.setChannel(Integer.parseInt(channelSp.getValue().toString()));
 
             worker.addPropertyChangeListener((PropertyChangeEvent evt1) -> {
                 if (worker.isCancelled()) {
@@ -213,11 +195,8 @@ public class XImageJWalkerGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField beanShellFileTf;
     private javax.swing.JButton bsFileBn;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JSpinner channelSp;
     private javax.swing.JComboBox fileNameRegexCb;
     private javax.swing.JCheckBox ignorelROICb;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JButton openFolderBn;
     private javax.swing.JTextField openFolderTf;

@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * GPLv3
  */
 package FileManager;
 
@@ -12,6 +10,7 @@ import ij.io.FileSaver;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.Analyzer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,18 +19,17 @@ import java.util.List;
  */
 public class RoiProcessor {
 
-    static public List<String> measureAll(ImagePlus imp, int channel) {
+    static public List<Roi> getRois(ImagePlus imp) {
         Overlay ol = imp.getOverlay();
         Roi[] rois = ol.toArray();
-        return measureAll(rois, imp, channel);
+        return new ArrayList<>(Arrays.asList(rois));
     }
 
-    static public List<String> measureAll(Roi[] rois, ImagePlus imp, int channel) {
+    static public List<String> measureAll(List<Roi> rois, ImagePlus imp) {
         Analyzer ana = new Analyzer(imp);
         List<String> results = new ArrayList<>();
         for (Roi roi : rois) {
             imp.setRoi(roi);
-            imp.setC(channel);
             ana.measure();
             ResultsTable rt = Analyzer.getResultsTable();
             String[] col = rt.getHeadings();

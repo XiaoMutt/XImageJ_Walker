@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -59,8 +61,8 @@ public class XImageJWalkerPickupWindow extends StackWindow {
         doneBn.setLabel(">>> Done <<<");
 
         //when press done button add all roi to the overlay
-        doneBn.addActionListener((ActionEvent e) -> {
-            this.xiwt.resumeWorker(RoiProcessor.measureAll(rm.getRoisAsArray(), this.imp, this.xiwt.getChannel()));
+        doneBn.addActionListener((ActionEvent e) -> {            
+            this.xiwt.resumeWorker(new ArrayList<>(Arrays.asList(rm.getRoisAsArray())));
             RoiProcessor.saveImage(this.imp, rm.getRoisAsArray(), this.fileName);
             this.close();
 
@@ -104,11 +106,12 @@ public class XImageJWalkerPickupWindow extends StackWindow {
             impd.deleteRoi();
             itp.set("imp", impd);
             itp.source(xiwt.getBsFileName());
+            itp.eval("before()");
             this.imp.setOverlay(impd.getOverlay());
             impd.close();
 
         } catch (EvalError | IOException ex) {
-            IJ.log("BeanShell Script Error: \n" + ex.getMessage());
+            IJ.log("BeanShell Script Error: " + ex.getMessage());
         }
     }
 
