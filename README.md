@@ -2,6 +2,7 @@
 # XImageJ_Walker
 
 A ImageJ Plugin lets you transverse all images in a folder, process each image through a BeanShell script, and save the measurement data in a CSV file. 
+The BeanShell script is much more powerful than ImageJ marco language.
 
 XImageJ_Walker will ask the following:
 - a folder contains your images
@@ -25,7 +26,7 @@ Notes:
 
 Example:
 - Recognize white objects in a black background and measure the mean intensity as well as the area.
-- the BeanShell file will be (you can record using "Plugins->Macros->Record..." and choose BeanShell:
+- the BeanShell file will be:
 ```java
 //import the IJ class, you also import any package you need
 import ij.IJ;
@@ -46,3 +47,4 @@ IJ.run(imp, "Analyze Particles...", "size=10-Infinity exclude clear add");
 //set measurements 
 IJ.run("Set Measurements...", "area mean display redirect=None decimal=2");
 ```
+- you can record BeanShell commands using "Plugins->Macros->Record..." and choose BeanShell.
