@@ -35,7 +35,7 @@ Example:
 - Recognize white objects in a black background and measure the mean intensity as well as the area.
 - the BeanShell file will be:
 ```java
-//import the IJ class, you also can import any package you need
+//import the IJ class.
 import ij.IJ;
 
 /* 
@@ -54,9 +54,6 @@ before(){
     IJ.run(imp, "Make Binary", "");
     //analyze particles and add to RoiManager
     IJ.run(imp, "Analyze Particles...", "size=1000-Infinity exclude clear add");
-
-    //set measurements 
-    IJ.run("Set Measurements...", "area mean display redirect=None decimal=2");
 }
 
 /* 
