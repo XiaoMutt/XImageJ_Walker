@@ -29,7 +29,7 @@ Notes:
 - You can set up the measurement first in "Analyze->Set Measurements", or you can setup the measurement by calling "Set Measurements" in the BeanShell script.
 - The Plugin will send the ImagePlus object of an image file to the "imp" variable of the BeanShell script, so the BeanShell script should use the variable name imp to get an process the image.
 - The Plugin use the Rois in the RoiManager, so make sure the Rois are loaded into the RoiManager using the before() function of in the BeanShell script.
-- If all the image files have an Overlay containing all Rois, you can uncheck the "Ignore any save Rois...", and then the Plugin will use the saved Rois.
+- If all the image files have an Overlay containing all Rois, you can uncheck the "Ignore any saved Rois...", and then the Plugin will use the saved Rois.
 
 Example:
 - Recognize white objects in a black background and measure the mean intensity as well as the area.
